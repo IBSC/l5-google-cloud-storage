@@ -24,18 +24,15 @@ class CloudStorageServiceProvider extends ServiceProvider
         Storage::extend('gcs', function ($app, $config) {
 
             $adapterConfiguration = ['bucket' => $config['bucket']];
-            $serviceBuilderConfig = [];
 
             $optionalServiceBuilder = null;
 
             if (array_key_exists('project_id', $config) && false === empty($config['project_id'])) {
                 $adapterConfiguration += ['projectId' => $config['project_id']];
-                $serviceBuilderConfig += ['projectId' => $config['project_id']];
             }
 
             if (array_key_exists('credentials', $config) && false === empty($config['credentials'])) {
-                $serviceBuilderConfig += ['keyFilePath' => $config['credentials']];
-                $optionalServiceBuilder = new ServiceBuilder($serviceBuilderConfig);
+                $adapterConfiguration += ['keyFilePath' => $config['credentials']];
             }
 
             $adapter = new GoogleCloudStorageAdapter($optionalServiceBuilder, $adapterConfiguration);
